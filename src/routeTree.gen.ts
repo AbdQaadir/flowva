@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthErrorRouteImport } from './routes/auth/error'
 import { Route as AuthConfirmRouteImport } from './routes/auth/confirm'
 import { Route as ProtectedRewardsIndexRouteImport } from './routes/_protected/rewards/index'
+import { Route as ProtectedOnboardingIndexRouteImport } from './routes/_protected/onboarding/index'
 
 const UpdatePasswordRoute = UpdatePasswordRouteImport.update({
   id: '/update-password',
@@ -69,6 +70,12 @@ const ProtectedRewardsIndexRoute = ProtectedRewardsIndexRouteImport.update({
   path: '/rewards/',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedOnboardingIndexRoute =
+  ProtectedOnboardingIndexRouteImport.update({
+    id: '/onboarding/',
+    path: '/onboarding/',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/auth/error': typeof AuthErrorRoute
+  '/onboarding': typeof ProtectedOnboardingIndexRoute
   '/rewards': typeof ProtectedRewardsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/auth/error': typeof AuthErrorRoute
+  '/onboarding': typeof ProtectedOnboardingIndexRoute
   '/rewards': typeof ProtectedRewardsIndexRoute
 }
 export interface FileRoutesById {
@@ -103,6 +112,7 @@ export interface FileRoutesById {
   '/update-password': typeof UpdatePasswordRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/auth/error': typeof AuthErrorRoute
+  '/_protected/onboarding/': typeof ProtectedOnboardingIndexRoute
   '/_protected/rewards/': typeof ProtectedRewardsIndexRoute
 }
 export interface FileRouteTypes {
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/update-password'
     | '/auth/confirm'
     | '/auth/error'
+    | '/onboarding'
     | '/rewards'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/update-password'
     | '/auth/confirm'
     | '/auth/error'
+    | '/onboarding'
     | '/rewards'
   id:
     | '__root__'
@@ -139,6 +151,7 @@ export interface FileRouteTypes {
     | '/update-password'
     | '/auth/confirm'
     | '/auth/error'
+    | '/_protected/onboarding/'
     | '/_protected/rewards/'
   fileRoutesById: FileRoutesById
 }
@@ -226,14 +239,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRewardsIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/onboarding/': {
+      id: '/_protected/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof ProtectedOnboardingIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
+  ProtectedOnboardingIndexRoute: typeof ProtectedOnboardingIndexRoute
   ProtectedRewardsIndexRoute: typeof ProtectedRewardsIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedOnboardingIndexRoute: ProtectedOnboardingIndexRoute,
   ProtectedRewardsIndexRoute: ProtectedRewardsIndexRoute,
 }
 

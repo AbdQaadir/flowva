@@ -1,11 +1,19 @@
 import type { Session, User } from "@supabase/supabase-js";
-import { useNavigate, useRouter } from "@tanstack/react-router";
 import { createContext, useContext, useEffect, useState } from "react";
 import supabase from "@/lib/supabase";
 
+type ExtendedUser = User & {
+	created_at?: string;
+	email?: string;
+	first_name?: string;
+	last_name?: string;
+	onboarding_completed?: boolean;
+	updated_at?: string;
+};
+
 type AuthContextType = {
 	session: Session | null;
-	user: User | null;
+	user: ExtendedUser | null;
 	loading: boolean;
 	handleLogout: () => void;
 };
@@ -18,9 +26,9 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const navigate = useNavigate();
 	const [session, setSession] = useState<Session | null>(null);
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<ExtendedUser | null>(null);
+
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -34,7 +42,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((_event, session) => {
 			setSession(session);
-			setUser(session?.user ?? null);
+
+			// Fetch user profile
+			supabase
+				.from("profiles")
+				.select("*")
+				.eq("id", session?.user?.id)
+				.single()
+				.then(({ data }) => {
+					setUser({
+						...session?.user,
+						...data,
+					});
+				});
 		});
 
 		return () => subscription.unsubscribe();

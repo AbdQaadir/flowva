@@ -54,7 +54,7 @@ const items = [
 
 export function AppSidebar() {
 	const router = useRouterState();
-	const { loading, handleLogout } = useAuth();
+	const { loading, handleLogout, user } = useAuth();
 
 	return (
 		<Sidebar>
@@ -99,18 +99,20 @@ export function AppSidebar() {
 					<Popover>
 						<PopoverTrigger asChild>
 							<div className="space-y-1 my-auto">
-								<p className="text-md font-medium leading-2">Quadri</p>
+								<p className="text-md font-medium leading-2">
+									{user?.first_name || user?.last_name || "User"}
+								</p>
 								<p className="text-sm text-muted-foreground">
-									example@gmail.com
+									{user?.email || "example@gmail.com"}
 								</p>
 							</div>
 						</PopoverTrigger>
 						<PopoverContent
-							className="p-2"
+							className="p-2 max-w-[220px]"
 							side="top"
 							align="end"
 							sideOffset={25}
-							alignOffset={-90}
+							alignOffset={-10}
 						>
 							<Button
 								className="w-full"

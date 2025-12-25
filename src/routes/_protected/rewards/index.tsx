@@ -27,7 +27,7 @@ const tabs = [
 ];
 
 function Rewards() {
-	// const { instruments } = Route.useLoaderData();
+	const { instruments } = Route.useLoaderData();
 
 	return (
 		<div className="min-h-screen space-y-8">

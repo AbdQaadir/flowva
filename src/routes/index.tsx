@@ -2,14 +2,9 @@
 
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import supabase from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 
 export const Route = createFileRoute("/")({
-	loader: async () => {
-		const { data: instruments } = await supabase.from("instruments").select();
-		return { instruments };
-	},
 	component: App,
 });
 
