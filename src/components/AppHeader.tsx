@@ -1,6 +1,6 @@
-import { Bell, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
+import NotificationBell from "./NotificationBell/NotificationBell";
 import { SidebarTrigger } from "./ui/sidebar";
 
 type Props = {
@@ -19,22 +19,12 @@ function AppHeader({ title, description, actionButtons }: Props) {
 				<p className="text-sm">{description}</p>
 			</div>
 			<div className="flex items-center gap-4">
-				<Button size="icon-lg" variant="secondary" className="rounded-full">
-					<Notification />
-				</Button>
+				<NotificationBell />
 
 				{actionButtons}
 			</div>
 		</div>
 	);
 }
-
-const Notification = () => {
-	return (
-		<div className="flex items-center gap-4">
-			<Bell className="w-6 h-6 text-gray-900" fill="currentColor" />
-		</div>
-	);
-};
 
 export default AppHeader;
