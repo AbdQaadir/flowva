@@ -1,9 +1,10 @@
 import { Share2, Star } from "lucide-react";
-import React from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import ShareStackModal from "../-modals/ShareStackModal";
 
 function EarnMorePoints() {
 	const { open: isSidebarOpen } = useSidebar();
@@ -55,10 +56,14 @@ function EarnMorePoints() {
 						<div className="flex items-center justify-between">
 							<p className="">Share your tool stack</p>
 
-							<Button variant="secondary" className="rounded-full">
-								<Share2 className="w-5 h-5" fontWeight="bold" />
-								Share
-							</Button>
+							<ShareStackModal
+								trigger={
+									<Button variant="secondary" className="rounded-full">
+										<Share2 className="w-5 h-5" fontWeight="bold" />
+										Share
+									</Button>
+								}
+							/>
 						</div>
 					</CardContent>
 				</Card>

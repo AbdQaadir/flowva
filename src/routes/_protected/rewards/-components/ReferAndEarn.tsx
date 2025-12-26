@@ -1,21 +1,23 @@
 import { Link } from "@tanstack/react-router";
-import {
-	Check,
-	Copy,
-	Facebook,
-	Linkedin,
-	Twitter,
-	User2,
-	Users,
-	X,
-} from "lucide-react";
+import { Check, Copy, Users } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
+import { Route } from "..";
+
 function ReferAndEarn() {
 	const [copied, setCopied] = React.useState(false);
+	const { pointsData } = Route.useLoaderData();
+
+	const referralCode = pointsData?.referral_code;
+	const referralLink = referralCode
+		? `${import.meta.env.VITE_APP_URL}/sign-up?ref=${referralCode}`
+		: "";
+
+	const referralPoints = pointsData?.referral_points || 0;
+	const referralCount = pointsData?.referral_count || 0;
 
 	const handleCopy = (text: string) => {
 		try {
@@ -29,6 +31,7 @@ function ReferAndEarn() {
 			console.error("Failed to copy text: ", error);
 		}
 	};
+
 	return (
 		<section>
 			<h2 className="mb-6 text-xl text-black font-semibold border-l-4 border-primary pl-3">
@@ -50,41 +53,45 @@ function ReferAndEarn() {
 					<CardContent className="py-5 px-4 space-y-6">
 						<div className="grid grid-cols-2 justify-between gap-6">
 							<div className="text-center space-y-1">
-								<h4 className="text-2xl text-primary font-bold">0</h4>
+								<h4 className="text-2xl text-primary font-bold">
+									{referralCount}
+								</h4>
 								<p>Referrals</p>
 							</div>
 
 							<div className="text-center space-y-1">
-								<h4 className="text-2xl text-primary font-bold">0</h4>
+								<h4 className="text-2xl text-primary font-bold">
+									{referralPoints}
+								</h4>
 								<p>Points Earned</p>
 							</div>
 						</div>
 
-						<div className="bg-primary/5 p-3 space-y-2">
-							<p>Your personal referral link:</p>
+						{referralLink && (
+							<div className="bg-primary/5 p-3 space-y-2">
+								<p>Your personal referral link:</p>
 
-							{/* Copyable link */}
-							<div className="flex items-center gap-2">
-								<div className="w-full relative">
-									<input
-										type="text"
-										readOnly
-										className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full pr-10"
-										value="https://flowvahub.com/signup/?ref=quadr3409"
-									/>
-									<Button
-										className="transition absolute top-[50%] -translate-y-[50%] right-2"
-										size="icon-sm"
-										variant="ghost"
-										onClick={() =>
-											handleCopy("https://flowvahub.com/signup/?ref=quadr3409")
-										}
-									>
-										{copied ? <Check /> : <Copy />}
-									</Button>
+								{/* Copyable link */}
+								<div className="flex items-center gap-2">
+									<div className="w-full relative">
+										<input
+											type="text"
+											readOnly
+											className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full pr-10"
+											value={referralLink}
+										/>
+										<Button
+											className="transition absolute top-[50%] -translate-y-[50%] right-2"
+											size="icon-sm"
+											variant="ghost"
+											onClick={() => handleCopy(referralLink)}
+										>
+											{copied ? <Check /> : <Copy />}
+										</Button>
+									</div>
 								</div>
 							</div>
-						</div>
+						)}
 
 						{/* Social links */}
 

@@ -1,6 +1,7 @@
-import { SearchIcon } from "lucide-react";
-
+import { EyeIcon, EyeOff, SearchIcon } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
 import { Label } from "./label";
 
 type InputProps = React.ComponentProps<"input"> & {
@@ -20,6 +21,11 @@ function Input({
 	errorText,
 	...props
 }: InputProps) {
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+	const togglePasswordVisibility = () => {
+		setIsPasswordVisible(!isPasswordVisible);
+	};
 	return (
 		<div className="w-full flex flex-col gap-2">
 			{label && (
@@ -39,7 +45,13 @@ function Input({
 					</div>
 				)}
 				<input
-					type={type}
+					type={
+						type === "password"
+							? isPasswordVisible
+								? "text"
+								: "password"
+							: type
+					}
 					data-slot="input"
 					className={cn(
 						"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-11 md:h-15 w-full min-w-0 rounded-[30px] border bg-transparent px-6 py-4 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[#F2F2F2] md:text-sm",
@@ -49,6 +61,17 @@ function Input({
 					)}
 					{...props}
 				/>
+
+				{type === "password" && (
+					<Button
+						variant="ghost"
+						type="button"
+						className="absolute right-5 top-1/2 -translate-y-1/2 text-foreground/50 h-4 w-4"
+						onClick={togglePasswordVisibility}
+					>
+						{isPasswordVisible ? <EyeIcon /> : <EyeOff />}
+					</Button>
+				)}
 			</div>
 
 			{error && errorText && (

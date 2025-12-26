@@ -1,12 +1,43 @@
+import { useRouter } from "@tanstack/react-router";
 import { Award, Calendar, Gift, Star, UserPlus, Zap } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { useSidebar } from "@/components/ui/sidebar";
+import { Spinner } from "@/components/ui/spinner";
+import { claimDailyStreak } from "@/lib/supabase/fetch-daily-streaks-fn";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/AuthProvider";
+import { Route } from "@/routes/_protected/rewards/";
+import ReclaimModal from "../-modals/ReclaimModal";
 
 function RewardsJourney() {
+	const router = useRouter();
+	const { user } = useAuth();
 	const { open: isSidebarOpen } = useSidebar();
+
+	const { streaksData, pointsData } = Route.useLoaderData();
+	const totalPoints = pointsData?.points || 0;
+	const { claimedDates, totalStreaks, isTodayClaimed } = streaksData;
+
+	const [isClaiming, setIsClaiming] = useState(false);
+	const handleClaimPoints = async () => {
+		setIsClaiming(true);
+		try {
+			await claimDailyStreak();
+			router.invalidate();
+			toast.success("You have claimed today's points!");
+		} catch (error) {
+			console.error(error);
+			toast.error("Something went wrong");
+		} finally {
+			setIsClaiming(false);
+		}
+	};
+
 	return (
 		<section>
 			<h2 className="mb-6 text-xl text-black font-semibold border-l-4 border-primary pl-3">
@@ -27,7 +58,9 @@ function RewardsJourney() {
 
 					<CardContent className="py-5 px-4">
 						<div className="flex items-center justify-between">
-							<span className="text-4xl font-bold text-purple-600">5</span>
+							<span className="text-4xl font-bold text-purple-600">
+								{totalPoints}
+							</span>
 							<div className="h-10 w-10 rounded-full bg-yellow-400 flex items-center justify-center">
 								<div
 									className="h-8 w-8 rounded-full bg-yellow-400 flex items-center justify-center
@@ -45,11 +78,12 @@ function RewardsJourney() {
 						<div className="mt-6">
 							<div className="mb-2 flex justify-between text-sm text-gray-500">
 								<span>Progress to $5 Gift Card</span>
-								<span>5 / 5000</span>
+								<span>{totalPoints} / 5000</span>
 							</div>
 
 							<div className="h-2 w-full rounded-full bg-gray-200">
-								<div className="h-full w-[2%] rounded-full bg-purple-600" />
+								{/* <div className="h-full w-[2%] rounded-full bg-purple-600" /> */}
+								<Progress value={(totalPoints / 5000) * 100} className="" />
 							</div>
 
 							<p className="mt-3 text-xs text-gray-500">
@@ -67,32 +101,29 @@ function RewardsJourney() {
 
 					<CardContent className="py-5 px-4">
 						<div className="flex items-center justify-between">
-							<p className="mb-4 text-4xl font-bold text-primary">1 day</p>
+							<p className="mb-4 text-4xl font-bold text-primary">
+								{totalStreaks || 0} day
+							</p>
 						</div>
 
-						<div className="mb-4 flex gap-2">
-							{["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
-								<div
-									key={`${day}-${i + 1}`}
-									className={`flex h-8 w-8 items-center justify-center rounded-full text-sm ${
-										day === "T"
-											? "border-2 border-purple-600 text-purple-600"
-											: "bg-gray-100 text-gray-400"
-									}`}
-								>
-									{day}
-								</div>
-							))}
-						</div>
+						<DailyStreak claimedDates={claimedDates as string[]} />
 
 						<div className="w-full text-center space-y-2">
 							<p className="text-xs text-gray-500">
 								Check in daily to earn +5 points
 							</p>
 
-							<Button className="gap-2 w-full rounded-full font-bold">
-								<Zap className="w-5 h-5" fontWeight="bold" />
-								Claimed Today
+							<Button
+								className="gap-2 w-full rounded-full font-bold"
+								disabled={isTodayClaimed || isClaiming}
+								onClick={handleClaimPoints}
+							>
+								{isClaiming ? (
+									<Spinner />
+								) : (
+									<Zap className="w-5 h-5" fontWeight="bold" />
+								)}
+								{isTodayClaimed ? "Claimed Today" : "Claim Today's Points"}
 							</Button>
 						</div>
 					</CardContent>
@@ -133,14 +164,25 @@ function RewardsJourney() {
 							</div>
 						</div>
 						<div className="mt-6 flex flex-wrap gap-3">
-							<Button variant="default" className="rounded-full flex-1">
-								<UserPlus className="w-5 h-5" fontWeight="bold" />
-								Sign up
-							</Button>
-							<Button variant="gradient" className="rounded-full flex-1">
-								<Gift className="w-5 h-5" fontWeight="bold" />
-								Claim 50 pts
-							</Button>
+							<a
+								href="https://go.reclaim.ai/ur9i6g5eznps"
+								rel="noreferrer"
+								target="_blank"
+							>
+								<Button variant="default" className="rounded-full flex-1">
+									<UserPlus className="w-5 h-5" fontWeight="bold" />
+									Sign up
+								</Button>
+							</a>
+							<ReclaimModal
+								userId={user?.id || ""}
+								trigger={
+									<Button variant="gradient" className="rounded-full flex-1">
+										<Gift className="w-5 h-5" fontWeight="bold" />
+										Claim 50 pts
+									</Button>
+								}
+							/>
 						</div>
 					</CardContent>
 				</Card>
@@ -148,4 +190,54 @@ function RewardsJourney() {
 		</section>
 	);
 }
+
+interface DailyStreakProps {
+	claimedDates: string[]; // array of YYYY-MM-DD strings, e.g., ["2025-12-22", "2025-12-23"]
+}
+
+export const DailyStreak = ({ claimedDates }: DailyStreakProps) => {
+	const today = new Date().toISOString().split("T")[0];
+
+	// Weekdays starting from Monday
+	const days = ["M", "T", "W", "T", "F", "S", "S"];
+	const dayOffsets = [1, 2, 3, 4, 5, 6, 0]; // JS getDay() mapping (0=Sunday)
+
+	const currentDate = new Date();
+
+	return (
+		<div className="mb-4 flex gap-2">
+			{days.map((day, i) => {
+				const dayIndex = dayOffsets[i];
+				const date = new Date(currentDate);
+				// calculate the date corresponding to this weekday
+				const diff = dayIndex - currentDate.getDay();
+				date.setDate(currentDate.getDate() + diff);
+				const dateStr = date.toISOString().split("T")[0];
+
+				const isClaimed = claimedDates.includes(dateStr);
+				const isToday = dateStr === today;
+
+				const baseClasses =
+					"flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors";
+
+				const claimedClasses = "bg-purple-600 text-white";
+				const todayClasses = "border-2 border-purple-600 font-semibold";
+				const defaultClasses = "bg-gray-100 text-gray-400";
+
+				const classes = isClaimed
+					? claimedClasses
+					: isToday
+						? `${defaultClasses} ${todayClasses}`
+						: defaultClasses;
+
+				return (
+					<div key={`${day}-${i + 2}`} className={`${baseClasses} ${classes}`}>
+						{day}
+					</div>
+				);
+			})}
+		</div>
+	);
+};
+
 export default RewardsJourney;

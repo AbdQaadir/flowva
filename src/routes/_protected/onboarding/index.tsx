@@ -2,13 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Save } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod"; // or 'zod/v4'
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -129,16 +127,6 @@ function OnboardingPage() {
 					</form>
 				</DialogContent>
 			</Dialog>
-
-			{/* <Card className="w-full">
-				<CardHeader>
-					<CardTitle>Complete your profile</CardTitle>
-				</CardHeader>
-
-				<CardContent>
-				
-				</CardContent>
-			</Card> */}
 		</div>
 	);
 }

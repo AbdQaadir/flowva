@@ -1,16 +1,11 @@
-import { Star } from "lucide-react";
 import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useSidebar } from "@/components/ui/sidebar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { REWARD_STATUS_ENUM, REWARDS_CATALOG } from "@/constants/rewards";
 import { cn } from "@/lib/utils";
 
-enum PointsStatus {
-	locked = "locked",
-	unlocked = "unlocked",
-	comingSoon = "coming-soon",
-}
 const tabs = [
 	{
 		name: "All Rewards",
@@ -21,7 +16,7 @@ const tabs = [
 		value: "unlocked",
 	},
 	{
-		name: PointsStatus.locked,
+		name: "Locked",
 		value: "locked",
 	},
 	{
@@ -30,70 +25,6 @@ const tabs = [
 	},
 ];
 
-const points = [
-	{
-		icon: "💸",
-		title: "$5 Bank Transfer",
-		description: "The $5 equivalent will be transferred to your bank account.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "💸",
-		title: "$5 PayPal International",
-		description:
-			"Receive a $5 PayPal balance transfer directly to your PayPal account email.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "🎁",
-		title: "$5 Virtual Visa Card",
-		description:
-			"Use your $5 prepaid card to shop anywhere Visa is accepted online.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "🎁",
-		title: "$5 Apple Gift Card",
-		description:
-			"Redeem this $5 Apple Gift Card for apps, games, music, movies, and more on the App Store and iTunes.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "🎁",
-		title: "$5 Google Play Card",
-		description:
-			"Use this $5 Google Play Gift Card to purchase apps, games, movies, books, and more on the Google Play Store.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "🎁",
-		title: "$5 Amazon Gift Card",
-		description:
-			"Get a $5 digital gift card to spend on your favorite tools or platforms.",
-		points: 5000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "🎁",
-		title: "$10 Amazon Gift Card",
-		description:
-			"Get a $10 digital gift card to spend on your favorite tools or platforms.",
-		points: 10000,
-		status: PointsStatus.locked,
-	},
-	{
-		icon: "📚",
-		title: "Free Udemy Course",
-		description: "Coming Soon!",
-		points: 0,
-		status: PointsStatus.comingSoon,
-	},
-];
 function RedeemRewards() {
 	const { open: isSidebarOpen } = useSidebar();
 
@@ -104,20 +35,20 @@ function RedeemRewards() {
 	};
 
 	const filteredPoints = useMemo(() => {
-		if (!selectedTab || selectedTab === "all-rewards") return points;
+		if (!selectedTab || selectedTab === "all-rewards") return REWARDS_CATALOG;
 
-		return points.filter((point) => point.status === selectedTab);
+		return REWARDS_CATALOG.filter((point) => point.status === selectedTab);
 	}, [selectedTab]);
 
 	const pointsCountByStatus = useMemo(() => {
 		const pointsCountByStatus: Record<string, number> = {
-			"all-rewards": points.length,
+			"all-rewards": REWARDS_CATALOG.length,
 			locked: 0,
 			unlocked: 0,
 			"coming-soon": 0,
 		};
 
-		points.forEach((point) => {
+		REWARDS_CATALOG.forEach((point) => {
 			pointsCountByStatus[point.status] += 1;
 		});
 
@@ -171,8 +102,9 @@ function RedeemRewards() {
 						)}
 					>
 						{filteredPoints?.map((point) => {
-							const isLocked = point.status === PointsStatus.locked;
-							const isComingSoon = point.status === PointsStatus.comingSoon;
+							const isLocked = point.status === REWARD_STATUS_ENUM.locked;
+							const isComingSoon =
+								point.status === REWARD_STATUS_ENUM.comingSoon;
 							const isDisabled = isLocked || isComingSoon;
 
 							return (

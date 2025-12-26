@@ -1,14 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import AppHeader from "@/components/AppHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import supabase from "@/lib/supabase";
+import { fetchDailyStreaks } from "@/lib/supabase/fetch-daily-streaks-fn";
+import { fetchUserPoints } from "@/lib/supabase/fetch-user-points-fn";
 import EarnPoints from "./-features/EarnPoints/EarnPoints";
 import RedeemRewards from "./-features/RedeemRewards/RedeemRewards";
 
 export const Route = createFileRoute("/_protected/rewards/")({
 	loader: async () => {
-		const { data: instruments } = await supabase.from("instruments").select();
-		return { instruments };
+		const streaksData = await fetchDailyStreaks();
+		const pointsData = await fetchUserPoints();
+		return {
+			streaksData,
+			pointsData,
+		};
 	},
 	component: Rewards,
 });
@@ -27,8 +32,6 @@ const tabs = [
 ];
 
 function Rewards() {
-	const { instruments } = Route.useLoaderData();
-
 	return (
 		<div className="min-h-screen space-y-8">
 			{/* Header */}
@@ -53,7 +56,7 @@ function Rewards() {
 
 				{tabs.map((tab) => (
 					<TabsContent key={tab.value} value={tab.value}>
-						<p className="text-muted-foreground text-sm">{tab.content}</p>
+						{tab.content}
 					</TabsContent>
 				))}
 			</Tabs>

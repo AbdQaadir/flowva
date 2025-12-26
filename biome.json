@@ -30,6 +30,12 @@
 			},
 			"correctness": {
 				"useUniqueElementIds": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "info"
+			},
+			"suspicious": {
+				"noExplicitAny": "off"
 			}
 		}
 	},

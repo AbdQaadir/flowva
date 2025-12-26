@@ -1,5 +1,14 @@
-import { useRouter, useRouterState } from "@tanstack/react-router";
-import { Calendar, Home, Inbox, LogOut, Search, Settings } from "lucide-react";
+import { useRouterState } from "@tanstack/react-router";
+import {
+	Calendar,
+	Compass,
+	CreditCard,
+	Gem,
+	Home,
+	Layers,
+	LogOut,
+	UserRoundCog,
+} from "lucide-react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,7 +22,6 @@ import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Spinner } from "./ui/spinner";
 
-// Menu items.
 const items = [
 	{
 		title: "Home",
@@ -23,7 +31,7 @@ const items = [
 	{
 		title: "Discover",
 		url: "#",
-		icon: Inbox,
+		icon: Compass,
 	},
 	{
 		title: "Library",
@@ -33,22 +41,22 @@ const items = [
 	{
 		title: "Tech Stack",
 		url: "#",
-		icon: Search,
+		icon: Layers,
 	},
 	{
 		title: "Subscriptions",
 		url: "#",
-		icon: Settings,
+		icon: CreditCard,
 	},
 	{
 		title: "Rewards Hub",
 		url: "/rewards",
-		icon: Settings,
+		icon: Gem,
 	},
 	{
 		title: "Settings",
 		url: "#",
-		icon: Settings,
+		icon: UserRoundCog,
 	},
 ];
 
@@ -108,7 +116,7 @@ export function AppSidebar() {
 							</div>
 						</PopoverTrigger>
 						<PopoverContent
-							className="p-2 max-w-[220px]"
+							className="p-2 max-w-55"
 							side="top"
 							align="end"
 							sideOffset={25}
