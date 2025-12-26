@@ -13,10 +13,15 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
+type Props = {
+	referralCode?: string;
+};
 export function SignUpForm({
 	className,
 	...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentPropsWithoutRef<"div"> & Props) {
+	const referralCode = props.referralCode;
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [repeatPassword, setRepeatPassword] = useState("");
@@ -36,11 +41,14 @@ export function SignUpForm({
 		setIsLoading(true);
 
 		try {
-			const { error } = await supabase.auth.signUp({
+			const { error, data } = await supabase.auth.signUp({
 				email,
 				password,
 				options: {
 					emailRedirectTo: `${window.location.origin}/rewards`,
+					data: {
+						referral_code: referralCode,
+					},
 				},
 			});
 			if (error) throw error;

@@ -26,9 +26,25 @@ export const Route = createFileRoute("/_protected")({
 			user,
 		};
 	},
+	pendingComponent: ProtectedLoader,
 	component: ProtectedLayout,
 });
 
+function ProtectedLoader() {
+	return (
+		<div className="fixed top-0 left-o z-50 w-full h-full inset-0 flex items-center justify-center bg-gray-100">
+			<div className="flex flex-col items-center gap-4">
+				<img
+					src="/flowva_logo.png"
+					alt="logo"
+					width={250}
+					height={120}
+					className="animate-pulse"
+				/>
+			</div>
+		</div>
+	);
+}
 function ProtectedLayout() {
 	return (
 		<SidebarProvider>

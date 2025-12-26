@@ -1,15 +1,7 @@
-import type { Session, User } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import supabase from "@/lib/supabase";
-
-type ExtendedUser = User & {
-	created_at?: string;
-	email?: string;
-	first_name?: string;
-	last_name?: string;
-	onboarding_completed?: boolean;
-	updated_at?: string;
-};
+import type { ExtendedUser } from "@/types/user";
 
 type AuthContextType = {
 	session: Session | null;

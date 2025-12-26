@@ -1,16 +1,23 @@
-import { SignUpForm } from '@/components/sign-up-form'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import z from "zod";
+import { SignUpForm } from "@/components/auth/sign-up-form";
 
-export const Route = createFileRoute('/sign-up')({
-  component: SignUp,
-})
+const SignUpSearchSchema = z.object({
+	ref: z.string().optional(),
+});
+export const Route = createFileRoute("/sign-up")({
+	component: SignUp,
+	validateSearch: SignUpSearchSchema,
+});
 
 function SignUp() {
-  return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <SignUpForm />
-      </div>
-    </div>
-  )
+	const { ref } = Route.useSearch();
+
+	return (
+		<div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+			<div className="w-full max-w-sm">
+				<SignUpForm referralCode={ref} />
+			</div>
+		</div>
+	);
 }
