@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import z from "zod";
-import { SignUpForm } from "@/components/auth/sign-up-form";
 
-const SignUpSearchSchema = z.object({
-	ref: z.string().optional(),
-});
+import { SignUpForm } from "@/components/auth/sign-up-form";
+import { SignUpSearchSchema } from "@/schemas/authSchema";
+
 export const Route = createFileRoute("/sign-up")({
 	component: SignUp,
 	validateSearch: SignUpSearchSchema,

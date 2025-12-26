@@ -3,8 +3,8 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Save } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod"; // or 'zod/v4'
+import { toast } from "sonner"; // or 'zod/v4'
+import type { z } from "zod";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,13 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { completeOnboarding } from "@/lib/supabase/complete-onboarding-server-fn";
+import { OnboardingSchema } from "@/schemas/authSchema";
 
-const FormSchema = z.object({
-	firstName: z.string("First name is required").min(1),
-	lastName: z.string("Last name is required").min(1),
-});
-
-type FormValues = z.infer<typeof FormSchema>;
+type FormValues = z.infer<typeof OnboardingSchema>;
 
 export const Route = createFileRoute("/_protected/onboarding/")({
 	component: OnboardingPage,
@@ -42,7 +38,7 @@ function OnboardingPage() {
 			firstName: "",
 			lastName: "",
 		},
-		resolver: zodResolver(FormSchema),
+		resolver: zodResolver(OnboardingSchema),
 		reValidateMode: "onChange",
 	});
 	async function onSubmit(data: FormValues) {

@@ -1,11 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
+import { OnboardingSchema } from "@/schemas/authSchema";
 import { createClient } from "./server";
-
-const OnboardingSchema = z.object({
-	firstName: z.string().min(1),
-	lastName: z.string().min(1),
-});
 
 export const completeOnboarding = createServerFn({
 	method: "POST",

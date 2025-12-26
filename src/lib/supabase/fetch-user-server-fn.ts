@@ -1,6 +1,6 @@
 import type { Factor, User } from "@supabase/supabase-js";
 import { createServerFn } from "@tanstack/react-start";
-import z from "zod";
+import { FetchProfileSchema } from "@/schemas/authSchema";
 import { createClient } from "./server";
 
 type SSRSafeUser = User & {
@@ -25,9 +25,6 @@ type Profile = {
 	onboarding_completed: boolean;
 };
 
-const FetchProfileSchema = z.object({
-	userId: z.string().min(1),
-});
 export const fetchProfile = createServerFn({
 	method: "GET",
 })
