@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, Inbox, Mail, MoreHorizontal, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications } from "@/hooks/use-notifications";
 import type { Notification } from "@/types/notifications";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
