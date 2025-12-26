@@ -3,8 +3,8 @@ import AppHeader from "@/components/AppHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchDailyStreaks } from "@/lib/supabase/fetch-daily-streaks-fn";
 import { fetchUserPoints } from "@/lib/supabase/fetch-user-points-fn";
-import EarnPoints from "./-features/EarnPoints/EarnPoints";
-import RedeemRewards from "./-features/RedeemRewards/RedeemRewards";
+import EarnPoints from "./-features/earn-points/earn-points";
+import RedeemRewards from "./-features/redeem-rewards/redeem-rewards";
 
 export const Route = createFileRoute("/_protected/rewards/")({
 	loader: async () => {

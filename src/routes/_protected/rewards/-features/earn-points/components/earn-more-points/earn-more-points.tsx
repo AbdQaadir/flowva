@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import ShareStackModal from "../-modals/ShareStackModal";
+import ShareStackModal from "../../../../-modals/share-stack-modal";
 
 function EarnMorePoints() {
 	const { open: isSidebarOpen } = useSidebar();

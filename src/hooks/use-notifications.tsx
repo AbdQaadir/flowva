@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import supabase from "@/lib/supabase";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/providers/auth-provider";
 import type { Notification } from "@/types/notifications";
 
 export function useNotifications() {

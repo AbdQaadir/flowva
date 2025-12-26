@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { Route } from "..";
+import { Route } from "../../../..";
 
 function ReferAndEarn() {
 	const [copied, setCopied] = React.useState(false);
@@ -94,7 +94,6 @@ function ReferAndEarn() {
 						)}
 
 						{/* Social links */}
-
 						<div className="w-full flex items-center justify-center gap-2">
 							<Link
 								to="/rewards"
